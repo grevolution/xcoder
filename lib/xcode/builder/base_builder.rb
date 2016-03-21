@@ -9,7 +9,7 @@ module Xcode
     class BaseBuilder
       include Xcode::TerminalOutput
 
-      attr_accessor :profile, :identity, :build_path, :keychain, :sdk, :objroot, :symroot
+      attr_accessor :profile, :identity, :build_path, :keychain, :sdk, :objroot, :symroot, :platform_name
       attr_reader   :config, :target
 
       def initialize(target, config)
@@ -76,6 +76,8 @@ module Xcode
             print_task 'builder', "Using identity #{@identity}", :debug
             cmd.env["CODE_SIGN_IDENTITY"]     = "\"#{@identity}\""
           end
+
+          cmd << "PLATFORM_NAME=#{platform_name}" unless platform_name.nil?
 
           cmd << "-sdk #{sdk}" unless sdk.nil?
 
